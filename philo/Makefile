@@ -6,7 +6,7 @@
 #    By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/09 22:34:02 by aobshatk          #+#    #+#              #
-#    Updated: 2025/04/09 23:27:14 by aobshatk         ###   ########.fr        #
+#    Updated: 2025/04/09 23:51:21 by aobshatk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,11 @@ LIBR = philo.a
 NAME = philo
 
 ./objs/%.o: ./utils/%.c
+	@mkdir -p objs
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 ./objs/%.o: ./src/%.c
+	@mkdir -p objs
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(LIBR)
@@ -46,6 +48,7 @@ clean:
 fclean: clean
 	@rm -f ./objs/$(LIBR)
 	@rm -f $(NAME)
+	@rm -d objs
 	@echo "Full clean complete"
 
 re: fclean $(NAME)
