@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:19 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 15:41:23 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/11 16:21:34 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,15 @@ static int	is_int (char **argv)
 static int	max_sleep (char **argv)
 {
 	int	i;
+	long long int	limit;
 
 	i = 2;
 	while(argv[i])
 	{
-		if (ft_atoil(argv[i]) > 1000000)
+		limit = ft_atoil(argv[i]);
+		if (limit > 1000000)
+			return (1);
+		if (limit < 0)
 			return (1);
 		i++;
 	}
@@ -82,7 +86,7 @@ int	check_valid(char **argv)
 	}
 	if (max_sleep(argv))
 	{
-		printf("Excided max allowed value\n");
+		printf("Excided max or min allowed value\n");
 		return (0);
 	}
 	return (1);
