@@ -1,25 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
+/*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 15:35:16 by aobshatk         ###   ########.fr       */
+/*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
+/*   Updated: 2025/04/11 13:13:17 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILO_H
-# define PHILO_H
+# include "../includes/philo.h"
 
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <stdlib.h>
-# include <limits.h>
+long long int	ft_atoil(const char *str)
+{
+	long long int	i;
+	long long int	sign;
 
-
-int	check_valid(char **argv);
-long long int	ft_atoil(const char *str);
-#endif
+	i = 0;
+	sign = 1;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '+' || *str == '-')
+	{
+		sign = 44 - *str;
+		str++;
+	}
+	while (*str >= 48 && *str <= 57)
+	{
+		i = i * 10 + (*str - 48);
+		str++;
+	}
+	return (i * sign);
+}
