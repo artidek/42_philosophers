@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 13:13:17 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/11 23:24:30 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,20 @@ long long int	ft_atoil(const char *str)
 		str++;
 	}
 	return (i * sign);
+}
+
+void	death_time(void *philo)
+{
+	t_philo *philo_n;
+
+	philo_n = (t_philo *)philo; 
+	printf("philo %d", (int)(philo_n->philo));
+}
+
+void	sim_philo(void *philos)
+{
+	t_philo *philo_n;
+
+	philo_n = (t_philo *)philos; 
+	printf("philo %d", (int)(philo_n->philo));
 }
