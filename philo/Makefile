@@ -3,18 +3,18 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+         #
+#    By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/09 22:34:02 by aobshatk          #+#    #+#              #
-#    Updated: 2025/04/11 15:37:21 by aobshatk         ###   ########.fr        #
+#    Updated: 2025/04/12 23:12:12 by aobshatk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g
 
-UTILS = ./utils/checkers.c ./utils/helpers.c
-SRC = ./src/init_philos.c
+UTILS = ./utils/checkers.c ./utils/helpers.c ./utils/sim_helpers.c
+SRC = ./src/init_philos.c ./src/simulation.c
 
 UTILOBJS = $(patsubst %.c, ./objs/%.o, $(notdir $(UTILS)))
 SRCOBJS = $(patsubst %.c, ./objs/%.o, $(notdir $(SRC)))
@@ -33,7 +33,7 @@ NAME = philo
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(LIBR)
-	@$(CC) $(CFLAGS) main.c objs/$(LIBR) -o $(NAME)
+	@$(CC) $(CFLAGS) main.c objs/$(LIBR) -o $(NAME) -lc
 	@echo "Build complete"
 
 all: $(NAME)

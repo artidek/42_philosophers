@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 23:30:41 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/12 11:07:06 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	main(int argc, char **argv)
 	init_philos(&time_set, &philos, argv);
 	if (!philos)
 		return (1);
-	//start_sim(philos);
-	free(philos);
+	start_sim(philos);
+	clear_philos(&philos);
 	return (0);
 }

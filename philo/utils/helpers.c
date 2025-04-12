@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 23:24:30 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/12 23:06:21 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,24 @@ long long int	ft_atoil(const char *str)
 	return (i * sign);
 }
 
-void	death_time(void *philo)
+void	clear_philos(t_philo **philos)
 {
-	t_philo *philo_n;
+	t_philo *next;
 
-	philo_n = (t_philo *)philo; 
-	printf("philo %d", (int)(philo_n->philo));
+	if (!*philos)
+		return;
+	while(*philos)
+	{
+		next = (*philos)->next;
+		free(*philos);
+		*philos = next;
+	}
 }
 
-void	sim_philo(void *philos)
+long int	get_time ()
 {
-	t_philo *philo_n;
+	struct timeval dt;
 
-	philo_n = (t_philo *)philos; 
-	printf("philo %d", (int)(philo_n->philo));
+	gettimeofday(&dt, NULL);
+	return (dt.tv_usec);
 }

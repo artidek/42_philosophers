@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/11 23:39:13 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/12 21:53:31 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	set_time(char **argv, t_time_set *time_set)
 	time_set->time_to_eat = (int)ft_atoil(argv[3]);
 	time_set->time_to_sleep = (int)ft_atoil(argv[4]);
 	time_set->time_thinking = (time_set->time_to_die) - ((time_set->time_to_eat)
-			+ (time_set->time_to_sleep));
+			+ (time_set->time_to_sleep) - 10000);
 	if (time_set->time_thinking <= 0)
 		time_set->time_thinking = 1;
 	if (!argv[5])
@@ -32,7 +32,7 @@ static t_philo	*last_philo(t_philo *philos)
 	if (!philos)
 		return (NULL);
 	if (!philos->next)
-		return (philos);
+		return (NULL);
 	while (philos->next)
 		philos = philos->next;
 	return (philos);
@@ -46,14 +46,12 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	if (!new_philo)
 		return (NULL);
 	new_philo->death = 0;
-	new_philo->fork = 1;
-	new_philo->hungry = 0;
+	//new_philo->fork = 1;
+	//new_philo->hungry = 0;
 	new_philo->philo = philo;
 	new_philo->time_set = time_set;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
-	new_philo->death_time = death_time;
-	new_philo->sim = sim_philo;
 	return (new_philo);
 }
 
