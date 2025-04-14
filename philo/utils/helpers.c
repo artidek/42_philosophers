@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/12 23:06:21 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/14 15:00:40 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,11 @@ long int	get_time ()
 
 	gettimeofday(&dt, NULL);
 	return (dt.tv_usec);
+}
+
+long int	abst(long int val)
+{
+	if (val < 0)
+		return (-val);
+	return (val);
 }

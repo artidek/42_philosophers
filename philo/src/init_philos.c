@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/12 21:53:31 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:49:09 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,9 @@
 
 static void	set_time(char **argv, t_time_set *time_set)
 {
-	time_set->time_to_die = (int)ft_atoil(argv[2]);
-	time_set->time_to_eat = (int)ft_atoil(argv[3]);
-	time_set->time_to_sleep = (int)ft_atoil(argv[4]);
-	time_set->time_thinking = (time_set->time_to_die) - ((time_set->time_to_eat)
-			+ (time_set->time_to_sleep) - 10000);
-	if (time_set->time_thinking <= 0)
-		time_set->time_thinking = 1;
+	time_set->time_to_die = (long int)ft_atoil(argv[2]);
+	time_set->time_to_eat = (long int)ft_atoil(argv[3]);
+	time_set->time_to_sleep = (long int)ft_atoil(argv[4]);
 	if (!argv[5])
 		time_set->num_of_eats = 0;
 	else
@@ -32,7 +28,7 @@ static t_philo	*last_philo(t_philo *philos)
 	if (!philos)
 		return (NULL);
 	if (!philos->next)
-		return (NULL);
+		return (philos);
 	while (philos->next)
 		philos = philos->next;
 	return (philos);
@@ -45,11 +41,13 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
+	new_philo->alive = 1;
 	new_philo->death = 0;
-	//new_philo->fork = 1;
-	//new_philo->hungry = 0;
+	new_philo->interupt = 0;
 	new_philo->philo = philo;
 	new_philo->time_set = time_set;
+	new_philo->lock = lock;
+	new_philo->unlock = unlock;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
 	return (new_philo);
@@ -69,7 +67,7 @@ static void	add_philo(t_philo **philos, t_philo *new_philo)
 	if (!*philos)
 	{
 		*philos = new_philo;
-		return;
+		return ;
 	}
 	lst_philo = last_philo(*philos);
 	lst_philo->next = new_philo;
