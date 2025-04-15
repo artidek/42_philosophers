@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/14 20:59:46 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:33:16 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ typedef struct s_philo
 	pthread_mutex_t	fork_lock;
 	pthread_mutex_t	alive_lock;
 	t_time_set		time_set;
-	void	(*lock)(struct s_philo *);
-	void	(*unlock)(struct s_philo *);
+	void			(*lock)(struct s_philo *);
+	void			(*unlock)(struct s_philo *);
 	struct s_philo	*prev;
 	struct s_philo	*next;
 
@@ -49,7 +49,7 @@ typedef struct s_philo
 int					check_valid(char **argv);
 int					check_death(t_philo *philo);
 long int			get_time(void);
-long int			abst(long int val);
+long int			time_diff(struct timeval start);
 long long int		ft_atoil(const char *str);
 void				init_philos(t_time_set *time_set, t_philo **philos,
 						char **argv);

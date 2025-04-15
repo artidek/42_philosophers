@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/14 15:00:40 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:31:53 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,13 @@ long int	get_time ()
 	return (dt.tv_usec);
 }
 
-long int	abst(long int val)
+long int	time_diff(struct timeval start)
 {
-	if (val < 0)
-		return (-val);
-	return (val);
+	struct timeval current;
+
+	gettimeofday(&current, NULL);
+	if (start.tv_sec - current.tv_sec > 0)
+		return((1000000 + current.tv_usec) - start.tv_usec);
+	else
+		return (current.tv_usec - start.tv_usec);
 }

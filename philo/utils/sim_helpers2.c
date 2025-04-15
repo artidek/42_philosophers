@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:19:06 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/14 23:16:53 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/15 14:35:51 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,12 @@
 
 int	go_eat_m(t_philo *philo)
 {
-	long int	start;
-	long int	diff;
+	struct timeval	start;
 
-	start = 1000000 - get_time();
-	printf("start %ld\n", start);
+	gettimeofday(&start, NULL);
 	philo_message(1, philo->philo);
 	(philo->lock)(philo);
-	diff = start + get_time();
-	printf("diff %ld\n", diff);
-	if (diff > philo->time_set.time_to_die)
+	if (time_diff(start) > philo->time_set.time_to_die)
 	{
 		philo_message(5, philo->philo);
 		philo->death = 1;
@@ -39,17 +35,16 @@ int	go_eat_m(t_philo *philo)
 
 int	go_sleep(t_philo *philo)
 {
-	long int	start;
-	long int	diff;
+	struct timeval	start;
 
-	start = 1000000 - get_time();
+	gettimeofday(&start, NULL);
 	philo_message(4, philo->philo);
 	usleep(philo->time_set.time_to_sleep);
-	diff = start + get_time();
-	if (diff > philo->time_set.time_to_die)
+	if (time_diff(start) > philo->time_set.time_to_die)
 	{
-		philo->death = 1;
 		philo_message(5, philo->philo);
+		philo->death = 1;
+		(philo->unlock)(philo);
 		return (0);
 	}
 	return (1);
@@ -67,7 +62,7 @@ int	go_eat_o(t_philo *philo)
 void	*sim_philo(void *philos)
 {
 	t_philo *philo_n;
-	
+
 	philo_n = (t_philo *)philos;
 	while (1)
 	{
