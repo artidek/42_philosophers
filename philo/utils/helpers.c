@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helpers.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/15 14:31:53 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:04:52 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,6 @@ void	clear_philos(t_philo **philos)
 	}
 }
 
-long int	get_time ()
-{
-	struct timeval dt;
-
-	gettimeofday(&dt, NULL);
-	return (dt.tv_usec);
-}
-
 long int	time_diff(struct timeval start)
 {
 	struct timeval current;
@@ -65,4 +57,17 @@ long int	time_diff(struct timeval start)
 		return((1000000 + current.tv_usec) - start.tv_usec);
 	else
 		return (current.tv_usec - start.tv_usec);
+}
+
+long int	get_time()
+{
+	struct timeval	time_stamp;
+	long int	millisecs;
+
+	gettimeofday(&time_stamp, NULL);
+	millisecs = time_stamp.tv_usec;
+	if (millisecs == 0 || millisecs < 1000)
+		return (millisecs);
+	else
+		return (millisecs / 1000);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:19:06 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/15 14:35:51 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:22:36 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ int	go_eat_m(t_philo *philo)
 	struct timeval	start;
 
 	gettimeofday(&start, NULL);
-	philo_message(1, philo->philo);
+	(philo->message)(1, philo);
 	(philo->lock)(philo);
-	if (time_diff(start) > philo->time_set.time_to_die)
+	if (philo->diff(start) > philo->time_set.time_to_die)
 	{
-		philo_message(5, philo->philo);
+		(philo->message)(5, philo);
 		philo->death = 1;
 		(philo->unlock)(philo);
 		return (0);
 	}
-	philo_message(2, philo->philo);
-	philo_message(3, philo->philo);
+	(philo->message)(2, philo);
+	(philo->message)(3, philo);
 	usleep(philo->time_set.time_to_eat);
 	(philo->unlock)(philo);
 	return (1);
@@ -38,11 +38,11 @@ int	go_sleep(t_philo *philo)
 	struct timeval	start;
 
 	gettimeofday(&start, NULL);
-	philo_message(4, philo->philo);
+	(philo->message)(4, philo);
 	usleep(philo->time_set.time_to_sleep);
 	if (time_diff(start) > philo->time_set.time_to_die)
 	{
-		philo_message(5, philo->philo);
+		(philo->message)(5, philo);
 		philo->death = 1;
 		(philo->unlock)(philo);
 		return (0);
@@ -52,9 +52,9 @@ int	go_sleep(t_philo *philo)
 
 int	go_eat_o(t_philo *philo)
 {
-	philo_message(1, philo->philo);
-	philo_message(2, philo->philo);
-	philo_message(3, philo->philo);
+	(philo->message)(1, philo);
+	(philo->message)(2, philo);
+	(philo->message)(3, philo);
 	usleep(philo->time_set.time_to_eat);
 	return (1);
 }

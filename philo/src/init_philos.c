@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/14 20:49:09 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/16 23:14:23 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
-	new_philo->alive = 1;
 	new_philo->death = 0;
-	new_philo->interupt = 0;
 	new_philo->philo = philo;
 	new_philo->time_set = time_set;
 	new_philo->lock = lock;
 	new_philo->unlock = unlock;
+	new_philo->message = philo_message;
+	new_philo->diff = time_diff;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
 	return (new_philo);
