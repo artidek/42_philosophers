@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/16 18:17:13 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/17 16:19:23 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static int	stop_sim(t_philo *philos)
 
 static void	sim_one (t_philo *philos)
 {
-	pthread_create(&(philos->thrd_philo), NULL, &sim_philo, philos);
+	pthread_create(&(philos->thrd_philo), NULL, (philos->one), philos);
 	pthread_detach(philos->thrd_philo);
 	while (!stop_sim(philos))
 		usleep(1000);
@@ -46,10 +46,12 @@ static void	sim_multiple (t_philo *philos)
 	temp = philos;
 	while (temp)
 	{
+		gettimeofday(&temp->start, NULL);
 		pthread_mutex_init(&(temp->fork_lock), NULL);
-		pthread_create(&(temp->thrd_philo), NULL, sim_philos, temp);
+		pthread_create(&(temp->thrd_philo), NULL, (temp->multiple), temp);
 		pthread_detach(temp->thrd_philo);
 		temp = temp->next;
+		usleep(500);
 	}
 	while (!stop_sim(philos))
 		usleep(100);

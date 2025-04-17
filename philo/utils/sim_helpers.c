@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/16 23:26:58 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/17 14:41:09 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ void	philo_message (int msg, t_philo *philo)
 void	*sim_philos(void *philos)
 {
 	t_philo *philo_n;
-	
+
 	philo_n = (t_philo *)philos;
 	while (1)
 	{
-		if (!go_eat_m(philo_n))
+		if (!(philo_n->eat_m)(philo_n))
 			return (NULL);
-		if (!go_sleep(philo_n))
+		if (!(philo_n->sleep)(philo_n))
 			return (NULL);
 	}
 	return (NULL);
