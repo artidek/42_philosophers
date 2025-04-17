@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/17 14:45:53 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/17 21:31:41 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	new_philo->lock = lock;
 	new_philo->unlock = unlock;
 	new_philo->message = philo_message;
-	new_philo->diff = time_diff;
 	new_philo->multiple = sim_philos;
 	new_philo->one = sim_philo;
 	new_philo->eat_m = go_eat_m;
