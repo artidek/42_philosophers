@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/17 16:19:23 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:29:49 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,24 @@
 
 static int	stop_sim(t_philo *philos)
 {
-	if (!philos->next)
+	t_philo *temp;
+
+	temp = philos;
+	if (!temp->next)
 	{
-		if (philos->death)
+		if (temp->death)
 			return (1);
 	}
 	else
 	{
-		while (philos)
+		while (temp)
 		{
-			if(philos->death)
-				return (1);
-			philos = philos->next;
+			if(temp->death)
+			{
+				mutex_cleanup(philos);
+				return(1);
+			}
+			temp = temp->next;
 		}
 	}
 	return (0);
@@ -54,7 +60,7 @@ static void	sim_multiple (t_philo *philos)
 		usleep(500);
 	}
 	while (!stop_sim(philos))
-		usleep(100);
+		usleep(500);
 }
 
 void	start_sim (t_philo *philos)

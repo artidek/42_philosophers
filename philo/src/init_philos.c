@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/17 21:31:41 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/18 11:13:10 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	new_philo->eat_m = go_eat_m;
 	new_philo->eat_o = go_eat_o;
 	new_philo->sleep = go_sleep;
-	new_philo->death_timer = check_death_timer;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
 	return (new_philo);

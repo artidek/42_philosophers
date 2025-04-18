@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/17 21:31:29 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:27:57 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_philo
 	void			(*lock)(struct s_philo *);
 	void			(*unlock)(struct s_philo *);
 	void			(*message)(int msg, struct s_philo *);
-	void			(*death_timer)(struct s_philo *);
 	void			*(*multiple)(void *);
 	void			*(*one)(void *);
 	int				(*eat_m)(struct s_philo *);
@@ -64,7 +63,8 @@ void				clear_philos(t_philo **philos);
 void				philo_message(int msg, t_philo *philo);
 void				lock(t_philo *philo);
 void				unlock(t_philo *philo);
-void				check_death_timer(t_philo *philo);
+void				mutex_cleanup(t_philo *philos);
+void				*check_death_timer(void *philo);
 void				*sim_philos(void *philos);
 void				*sim_philo(void *philos);
 int					go_eat_m(t_philo *philo);

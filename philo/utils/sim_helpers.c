@@ -6,23 +6,41 @@
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/17 14:41:09 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/18 12:27:26 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/philo.h"
+
+void	mutex_cleanup(t_philo *philos)
+{
+	while(philos)
+	{
+		pthread_mutex_destroy(&(philos->alive_lock));
+		pthread_mutex_destroy(&(philos->fork_lock));
+		philos = philos->next;
+	}
+}
 
 void	lock(t_philo *philo)
 {
 	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
 	{
 		pthread_mutex_lock(&(philo->fork_lock));
+		(philo->message)(2, philo);
+		usleep(1000);
 		pthread_mutex_lock(&(philo->prev->fork_lock));
+		(philo->message)(2, philo);
+		usleep(1000);
 	}
 	else
 	{
 		pthread_mutex_lock(&(philo->prev->fork_lock));
+		(philo->message)(2, philo);
+		usleep(1000);
 		pthread_mutex_lock(&(philo->fork_lock));
+		(philo->message)(2, philo);
+		usleep(1000);
 	}
 }
 
@@ -58,13 +76,20 @@ void	philo_message (int msg, t_philo *philo)
 void	*sim_philos(void *philos)
 {
 	t_philo *philo_n;
+	pthread_t	deatht_timer;
 
 	philo_n = (t_philo *)philos;
+	pthread_create(&deatht_timer, NULL, check_death_timer, philos);
+	pthread_detach(deatht_timer);
 	while (1)
 	{
-		if (!(philo_n->eat_m)(philo_n))
-			return (NULL);
-		if (!(philo_n->sleep)(philo_n))
+		(philo_n->message)(1, philo_n);
+		usleep(1000);
+		(philo_n->eat_m)(philo_n);
+		usleep(500);
+		(philo_n->sleep)(philo_n);
+		usleep(500);
+		if (philo_n->death)
 			return (NULL);
 	}
 	return (NULL);
