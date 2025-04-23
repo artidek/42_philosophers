@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/18 12:27:26 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:42:17 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,12 @@ void	lock(t_philo *philo)
 	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
 	{
 		pthread_mutex_lock(&(philo->fork_lock));
-		(philo->message)(2, philo);
-		usleep(1000);
 		pthread_mutex_lock(&(philo->prev->fork_lock));
-		(philo->message)(2, philo);
-		usleep(1000);
 	}
 	else
 	{
 		pthread_mutex_lock(&(philo->prev->fork_lock));
-		(philo->message)(2, philo);
-		usleep(1000);
 		pthread_mutex_lock(&(philo->fork_lock));
-		(philo->message)(2, philo);
-		usleep(1000);
 	}
 }
 
@@ -81,14 +73,12 @@ void	*sim_philos(void *philos)
 	philo_n = (t_philo *)philos;
 	pthread_create(&deatht_timer, NULL, check_death_timer, philos);
 	pthread_detach(deatht_timer);
+	pthread_mutex_init(&philo_n->alive_lock, NULL);
 	while (1)
 	{
 		(philo_n->message)(1, philo_n);
-		usleep(1000);
 		(philo_n->eat_m)(philo_n);
-		usleep(500);
 		(philo_n->sleep)(philo_n);
-		usleep(500);
 		if (philo_n->death)
 			return (NULL);
 	}

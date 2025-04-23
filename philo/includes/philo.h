@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/18 12:27:57 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/23 20:31:43 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,11 @@ typedef struct s_philo
 	int				death;
 	int				philo;
 	int				stop_timer;
+	int				*sim_stop;
 	pthread_t		thrd_philo;
 	pthread_mutex_t	fork_lock;
 	pthread_mutex_t	alive_lock;
 	t_time_set		time_set;
-	struct timeval	start;
 	void			(*lock)(struct s_philo *);
 	void			(*unlock)(struct s_philo *);
 	void			(*message)(int msg, struct s_philo *);
