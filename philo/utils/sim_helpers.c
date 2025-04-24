@@ -3,24 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/23 20:42:17 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 14:59:11 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/philo.h"
-
-void	mutex_cleanup(t_philo *philos)
-{
-	while(philos)
-	{
-		pthread_mutex_destroy(&(philos->alive_lock));
-		pthread_mutex_destroy(&(philos->fork_lock));
-		philos = philos->next;
-	}
-}
 
 void	lock(t_philo *philo)
 {
@@ -73,13 +63,13 @@ void	*sim_philos(void *philos)
 	philo_n = (t_philo *)philos;
 	pthread_create(&deatht_timer, NULL, check_death_timer, philos);
 	pthread_detach(deatht_timer);
-	pthread_mutex_init(&philo_n->alive_lock, NULL);
 	while (1)
 	{
 		(philo_n->message)(1, philo_n);
+		usleep(1000);
 		(philo_n->eat_m)(philo_n);
 		(philo_n->sleep)(philo_n);
-		if (philo_n->death)
+		if (*(philo_n->sim_stop) == 1)
 			return (NULL);
 	}
 	return (NULL);
