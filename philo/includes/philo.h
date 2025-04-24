@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 14:38:48 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:43:45 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,16 @@ typedef struct s_time_set
 
 typedef struct s_philo
 {
-	int				death;
 	int				philo;
-	int				stop_timer;
 	int				*sim_stop;
+	long int		last_eat;
 	pthread_t		thrd_philo;
 	pthread_mutex_t	fork_lock;
-	pthread_mutex_t	*alive_lock;
+	pthread_mutex_t	alive_lock;
 	t_time_set		time_set;
 	void			(*lock)(struct s_philo *);
 	void			(*unlock)(struct s_philo *);
-	void			(*message)(int msg, struct s_philo *);
+	void			(*message)(int msg, int philo);
 	void			*(*multiple)(void *);
 	void			*(*one)(void *);
 	int				(*eat_m)(struct s_philo *);
@@ -55,16 +54,17 @@ int					check_valid(char **argv);
 int					check_death(t_philo *philo);
 long int			time_diff(struct timeval start);
 long int			get_time(void);
+long int			get_stop_time(void);
 long long int		ft_atoil(const char *str);
 void				init_philos(t_time_set *time_set, t_philo **philos,
 						char **argv);
 void				start_sim(t_philo *philos);
 void				clear_philos(t_philo **philos);
-void				philo_message(int msg, t_philo *philo);
+void				philo_message(int msg, int philo);
 void				lock(t_philo *philo);
 void				unlock(t_philo *philo);
 void				mutex_cleanup(t_philo *philos);
-void				*check_death_timer(void *philo);
+void				check_death_timer(void *philo);
 void				*sim_philos(void *philos);
 void				*sim_philo(void *philos);
 int					go_eat_m(t_philo *philo);

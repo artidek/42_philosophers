@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 14:59:11 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:43:29 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,36 +40,39 @@ void	unlock(t_philo *philo)
 	}
 }
 
-void	philo_message (int msg, t_philo *philo)
+void	philo_message (int msg, int philo)
 {
 	if (msg == 1)
-		printf("%ld Philo %d is thinking\n", get_time(), philo->philo);
+		printf("%ld Philo %d is thinking\n", get_time(), philo);
 	else if (msg == 2)
-		printf("%ld Philo %d has taken a fork\n", get_time(), philo->philo);
+		printf("%ld Philo %d has taken a fork\n", get_time(), philo);
 	else if (msg == 3)
-		printf("%ld Philo %d is eating\n", get_time(), philo->philo);
+		printf("%ld Philo %d is eating\n", get_time(), philo);
 	else if (msg == 4)
-		printf("%ld Philo %d is sleeping\n", get_time(), philo->philo);
+		printf("%ld Philo %d is sleeping\n", get_time(), philo);
 	else if (msg == 5)
-		printf("%ld Philo %d has died\n", get_time(), philo->philo);
+		printf("%ld Philo %d has died\n", get_time(), philo);
 	usleep(100);
 }
 
 void	*sim_philos(void *philos)
 {
 	t_philo *philo_n;
-	pthread_t	deatht_timer;
 
 	philo_n = (t_philo *)philos;
-	pthread_create(&deatht_timer, NULL, check_death_timer, philos);
-	pthread_detach(deatht_timer);
 	while (1)
 	{
-		(philo_n->message)(1, philo_n);
-		usleep(1000);
-		(philo_n->eat_m)(philo_n);
-		(philo_n->sleep)(philo_n);
+		pthread_mutex_lock(&philo_n->fork_lock);
 		if (*(philo_n->sim_stop) == 1)
+		{
+			pthread_mutex_unlock(&philo_n->fork_lock);
+			return (0);
+		}
+		pthread_mutex_unlock(&philo_n->fork_lock);
+		(philo_n->message)(1, philo_n->philo);
+		if(!(philo_n->eat_m)(philo_n))
+			return (NULL);
+		if(!(philo_n->sleep)(philo_n))
 			return (NULL);
 	}
 	return (NULL);

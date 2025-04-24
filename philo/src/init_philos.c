@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/18 11:13:10 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:33:46 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
-	new_philo->death = 0;
-	new_philo->stop_timer = 0;
 	new_philo->philo = philo;
 	new_philo->time_set = time_set;
 	new_philo->lock = lock;
@@ -94,4 +92,5 @@ void	init_philos(t_time_set *time_set, t_philo **philos, char **argv)
 	}
 	if (*philos && (*philos)->next)
 		(*philos)->prev = last_philo(*philos);
+	printf("previous philo %d\n", (*philos)->prev->philo);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 14:40:35 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 23:25:11 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,18 @@ static void	sim_multiple (t_philo *philos)
 	while (temp)
 	{
 		temp->sim_stop = &stop_sim;
-		temp->alive_lock = &stop_lock;
+		temp->alive_lock = stop_lock;
+		temp->last_eat = get_stop_time();
 		pthread_mutex_init(&(temp->fork_lock), NULL);
 		pthread_create(&(temp->thrd_philo), NULL, (temp->multiple), temp);
 		temp = temp->next;
 		usleep(500);
 	}
+	check_death_timer(philos);
 	temp = philos;
 	while (temp)
 	{
-		pthread_join(philos->thrd_philo, NULL);
+		pthread_join(temp->thrd_philo, NULL);
 		temp = temp->next;
 	}
 }

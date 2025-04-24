@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/16 23:04:52 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/24 21:36:18 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,12 @@ void	clear_philos(t_philo **philos)
 	}
 }
 
-long int	time_diff(struct timeval start)
+long int get_stop_time()
 {
-	struct timeval current;
+	struct timeval time;
 
-	gettimeofday(&current, NULL);
-	if (start.tv_sec - current.tv_sec > 0)
-		return((1000000 + current.tv_usec) - start.tv_usec);
-	else
-		return (current.tv_usec - start.tv_usec);
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
 long int	get_time()
