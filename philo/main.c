@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/12 11:07:06 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:57:05 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ int	main(int argc, char **argv)
 	}
 	if (!check_valid(argv))
 		return (1);
+	if (argc == 6 && ft_atoil(argv[5]) < 1)
+	{
+		printf("Invalid number of eats\n");
+		return (1);
+	}
 	init_philos(&time_set, &philos, argv);
 	if (!philos)
 		return (1);

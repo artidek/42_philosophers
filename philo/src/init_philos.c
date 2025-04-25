@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 23:33:46 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:03:13 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static void	set_time(char **argv, t_time_set *time_set)
 {
-	time_set->time_to_die = (long int)ft_atoil(argv[2]);
-	time_set->time_to_eat = (long int)ft_atoil(argv[3]);
-	time_set->time_to_sleep = (long int)ft_atoil(argv[4]);
+	time_set->time_to_die = (long int)ft_atoil(argv[2]) * 1000;
+	time_set->time_to_eat = (long int)ft_atoil(argv[3]) * 1000;
+	time_set->time_to_sleep = (long int)ft_atoil(argv[4]) * 1000;
 	if (!argv[5])
-		time_set->num_of_eats = 0;
+		time_set->num_of_eats = -1;
 	else
 		time_set->num_of_eats = (int)ft_atoil(argv[5]);
 }
@@ -42,14 +42,13 @@ static t_philo	*new_philo(t_time_set time_set, int philo)
 	if (!new_philo)
 		return (NULL);
 	new_philo->philo = philo;
+	new_philo->num_eaten = 0;
 	new_philo->time_set = time_set;
 	new_philo->lock = lock;
 	new_philo->unlock = unlock;
-	new_philo->message = philo_message;
 	new_philo->multiple = sim_philos;
 	new_philo->one = sim_philo;
 	new_philo->eat_m = go_eat_m;
-	new_philo->eat_o = go_eat_o;
 	new_philo->sleep = go_sleep;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
@@ -92,5 +91,4 @@ void	init_philos(t_time_set *time_set, t_philo **philos, char **argv)
 	}
 	if (*philos && (*philos)->next)
 		(*philos)->prev = last_philo(*philos);
-	printf("previous philo %d\n", (*philos)->prev->philo);
 }

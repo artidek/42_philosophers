@@ -3,99 +3,55 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:19:06 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 23:44:24 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:14:41 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	go_eat_m(t_philo *philo)
+void	lock(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->alive_lock);
-	if (*(philo->sim_stop) == 1)
+	pthread_mutex_t *first_fork;
+	pthread_mutex_t *second_fork;
+
+	first_fork = &(philo->fork_lock);
+	second_fork = &(philo->prev->fork_lock);
+	if (first_fork < second_fork)
 	{
-		pthread_mutex_unlock(&philo->alive_lock);
-		return (0);
+		pthread_mutex_lock(first_fork);
+		pthread_mutex_lock(second_fork);
 	}
-	pthread_mutex_unlock(&philo->alive_lock);
-	(philo->lock)(philo);
-	pthread_mutex_lock(&philo->alive_lock);
-	if (*(philo->sim_stop) == 1)
+	else
 	{
-		pthread_mutex_unlock(&philo->alive_lock);
-		return (0);
+		pthread_mutex_lock(second_fork);
+		pthread_mutex_lock(first_fork);
 	}
-	pthread_mutex_unlock(&philo->alive_lock);
-	(philo->message)(2, philo->philo);
-	usleep(1000);
-	(philo->message)(2, philo->philo);
-	(philo->message)(3, philo->philo);
-	philo->last_eat = get_stop_time();
-	usleep(philo->time_set.time_to_eat);
-	philo->last_eat = get_stop_time();
-	(philo->unlock)(philo);
-	return (1);
 }
 
-int	go_sleep(t_philo *philo)
+void	unlock(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->alive_lock);
-	if (*(philo->sim_stop) == 1)
+	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
 	{
-		pthread_mutex_unlock(&philo->alive_lock);
-		return (0);
+		pthread_mutex_unlock(&(philo->fork_lock));
+		pthread_mutex_unlock(&(philo->prev->fork_lock));
 	}
-	pthread_mutex_unlock(&philo->alive_lock);
-	(philo->message)(4, philo->philo);
-	usleep(philo->time_set.time_to_sleep);
-	return (1);
-}
-
-int	go_eat_o(t_philo *philo)
-{
-	(philo->message)(1, philo->philo);
-	usleep(philo->time_set.time_to_eat);
-	(philo->message)(5, philo->philo);
-	return (0);
-}
-
-void	check_death_timer(void *philo)
-{
-	t_philo	*temp;
-
-	while (1)
+	else
 	{
-		temp = philo;
-		while (temp)
-		{
-			pthread_mutex_lock(&temp->alive_lock);
-			if (get_stop_time() - temp->last_eat >= temp->time_set.time_to_die / 1000)
-			{
-				(temp->message)(5, temp->philo);
-				*(temp->sim_stop) = 1;
-				pthread_mutex_unlock(&temp->alive_lock);
-				return;
-			}
-			pthread_mutex_unlock(&temp->alive_lock);
-			temp = temp->next;
-		}
+		pthread_mutex_unlock(&(philo->prev->fork_lock));
+		pthread_mutex_unlock(&(philo->fork_lock));
 	}
 }
 
 void	*sim_philo(void *philos)
 {
-	t_philo *philo_n;
+	t_philo *philo;
 
-	philo_n = (t_philo *)philos;
-	while (1)
-	{
-		if (!(philo_n->eat_o)(philo_n))
-			return (NULL);
-		if (!(philo_n->sleep)(philo_n))
-			return (NULL);
-	}
+	philo = (t_philo *)philos;
+	printf("%ld %d is thinking\n", get_time(), philo->philo);
+	usleep(philo->time_set.time_to_die);
+	printf("%ld %d died\n", get_time(), philo->philo);
 	return (NULL);
 }

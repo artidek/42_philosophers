@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkers.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:19 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/20 12:31:29 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 13:54:56 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	is_int (char **argv)
 	i = 0;
 	while (argv[i])
 	{
-		check_val = ft_atoil(argv[i]);
+		check_val = ft_atoil(argv[i]) * 1000;
 		if (check_val > INT_MAX || check_val < INT_MIN )
 			return (0);
 		i++;
@@ -64,6 +64,11 @@ int	check_valid(char **argv)
 	if (ft_atoil(argv[1]) < 1)
 	{
 		printf("Wrong number of philosophers\n");
+		return (0);
+	}
+	if (ft_atoil(argv[2]) < 1 || ft_atoil(argv[3]) < 1 || ft_atoil(argv[4]) < 1)
+	{
+		printf("Wrong argument\n");
 		return (0);
 	}
 	return (1);

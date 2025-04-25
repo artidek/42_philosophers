@@ -3,56 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 22:01:50 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 23:43:29 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 17:12:27 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../includes/philo.h"
 
-void	lock(t_philo *philo)
+int	go_eat_m(t_philo *philo)
 {
-	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
+	pthread_mutex_lock(&philo->alive_lock);
+	if (*(philo->sim_stop) == 1)
 	{
-		pthread_mutex_lock(&(philo->fork_lock));
-		pthread_mutex_lock(&(philo->prev->fork_lock));
+		pthread_mutex_unlock(&philo->alive_lock);
+		return (0);
 	}
-	else
+	pthread_mutex_unlock(&philo->alive_lock);
+	(philo->lock)(philo);
+	pthread_mutex_lock(&philo->alive_lock);
+	if (*(philo->sim_stop) == 1)
 	{
-		pthread_mutex_lock(&(philo->prev->fork_lock));
-		pthread_mutex_lock(&(philo->fork_lock));
+		pthread_mutex_unlock(&philo->alive_lock);
+		(philo->unlock)(philo);
+		return (0);
 	}
+	pthread_mutex_unlock(&philo->alive_lock);
+	printf("%ld %d has taken a fork\n", get_time(), philo->philo);
+	printf("%ld %d has taken a fork\n", get_time(), philo->philo);
+	usleep(1000);
+	printf("%ld %d is eating\n", get_time(), philo->philo);
+	philo->last_eat = get_stop_time();
+	usleep(philo->time_set.time_to_eat);
+	philo->last_eat = get_stop_time();
+	(philo->unlock)(philo);
+	return (1);
 }
 
-void	unlock(t_philo *philo)
+int	go_sleep(t_philo *philo)
 {
-	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
+	pthread_mutex_lock(&philo->alive_lock);
+	if (*(philo->sim_stop) == 1)
 	{
-		pthread_mutex_unlock(&(philo->fork_lock));
-		pthread_mutex_unlock(&(philo->prev->fork_lock));
+		pthread_mutex_unlock(&philo->alive_lock);
+		return (0);
 	}
-	else
-	{
-		pthread_mutex_unlock(&(philo->prev->fork_lock));
-		pthread_mutex_unlock(&(philo->fork_lock));
-	}
-}
-
-void	philo_message (int msg, int philo)
-{
-	if (msg == 1)
-		printf("%ld Philo %d is thinking\n", get_time(), philo);
-	else if (msg == 2)
-		printf("%ld Philo %d has taken a fork\n", get_time(), philo);
-	else if (msg == 3)
-		printf("%ld Philo %d is eating\n", get_time(), philo);
-	else if (msg == 4)
-		printf("%ld Philo %d is sleeping\n", get_time(), philo);
-	else if (msg == 5)
-		printf("%ld Philo %d has died\n", get_time(), philo);
-	usleep(100);
+	pthread_mutex_unlock(&philo->alive_lock);
+	printf("%ld %d is sleeping\n", get_time(), philo->philo);
+	usleep(philo->time_set.time_to_sleep);
+	return (1);
 }
 
 void	*sim_philos(void *philos)
@@ -60,20 +60,26 @@ void	*sim_philos(void *philos)
 	t_philo *philo_n;
 
 	philo_n = (t_philo *)philos;
+	usleep(500);
 	while (1)
 	{
-		pthread_mutex_lock(&philo_n->fork_lock);
+		pthread_mutex_lock(&philo_n->alive_lock);
 		if (*(philo_n->sim_stop) == 1)
 		{
-			pthread_mutex_unlock(&philo_n->fork_lock);
+			pthread_mutex_unlock(&philo_n->alive_lock);
 			return (0);
 		}
-		pthread_mutex_unlock(&philo_n->fork_lock);
-		(philo_n->message)(1, philo_n->philo);
+		pthread_mutex_unlock(&philo_n->alive_lock);
+		printf("%ld %d is thinking\n", get_time(), philo_n->philo);
+		usleep(500);
 		if(!(philo_n->eat_m)(philo_n))
 			return (NULL);
+		philo_n->num_eaten += 1;
 		if(!(philo_n->sleep)(philo_n))
 			return (NULL);
+		if (philo_n->time_set.num_of_eats == philo_n->num_eaten)
+		{
+			return (NULL);
+		}
 	}
-	return (NULL);
 }

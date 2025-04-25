@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 23:43:45 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/25 16:03:16 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_philo
 {
 	int				philo;
 	int				*sim_stop;
+	int				num_eaten;
 	long int		last_eat;
 	pthread_t		thrd_philo;
 	pthread_mutex_t	fork_lock;
@@ -40,11 +41,9 @@ typedef struct s_philo
 	t_time_set		time_set;
 	void			(*lock)(struct s_philo *);
 	void			(*unlock)(struct s_philo *);
-	void			(*message)(int msg, int philo);
 	void			*(*multiple)(void *);
 	void			*(*one)(void *);
 	int				(*eat_m)(struct s_philo *);
-	int				(*eat_o)(struct s_philo *);
 	int				(*sleep)(struct s_philo *);
 	struct s_philo	*prev;
 	struct s_philo	*next;
@@ -60,7 +59,6 @@ void				init_philos(t_time_set *time_set, t_philo **philos,
 						char **argv);
 void				start_sim(t_philo *philos);
 void				clear_philos(t_philo **philos);
-void				philo_message(int msg, int philo);
 void				lock(t_philo *philo);
 void				unlock(t_philo *philo);
 void				mutex_cleanup(t_philo *philos);
@@ -69,5 +67,4 @@ void				*sim_philos(void *philos);
 void				*sim_philo(void *philos);
 int					go_eat_m(t_philo *philo);
 int					go_sleep(t_philo *philo);
-int					go_eat_o(t_philo *philo);
 #endif
