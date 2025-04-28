@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/25 16:03:13 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/28 12:58:55 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	set_time(char **argv, t_time_set *time_set)
 {
-	time_set->time_to_die = (long int)ft_atoil(argv[2]) * 1000;
+	time_set->time_to_die = (long int)ft_atoil(argv[2]);
 	time_set->time_to_eat = (long int)ft_atoil(argv[3]) * 1000;
 	time_set->time_to_sleep = (long int)ft_atoil(argv[4]) * 1000;
 	if (!argv[5])
@@ -34,22 +34,19 @@ static t_philo	*last_philo(t_philo *philos)
 	return (philos);
 }
 
-static t_philo	*new_philo(t_time_set time_set, int philo)
+static t_philo	*new_philo(t_time_set time_set, int philo, int *stop_sim)
 {
 	t_philo	*new_philo;
 
 	new_philo = malloc(sizeof(t_philo));
 	if (!new_philo)
 		return (NULL);
+	new_philo->last_eat = malloc(sizeof(long int));
+	(*new_philo->last_eat) = 0;
+	new_philo->sim_stop = stop_sim;
 	new_philo->philo = philo;
 	new_philo->num_eaten = 0;
 	new_philo->time_set = time_set;
-	new_philo->lock = lock;
-	new_philo->unlock = unlock;
-	new_philo->multiple = sim_philos;
-	new_philo->one = sim_philo;
-	new_philo->eat_m = go_eat_m;
-	new_philo->sleep = go_sleep;
 	new_philo->prev = NULL;
 	new_philo->next = NULL;
 	return (new_philo);
@@ -80,13 +77,16 @@ void	init_philos(t_time_set *time_set, t_philo **philos, char **argv)
 {
 	int	num_philos;
 	int	i;
+	int	*stop_sim;
 
+	stop_sim = malloc(sizeof(int));
+	*stop_sim = 0;
 	num_philos = (int)ft_atoil(argv[1]);
 	i = 0;
 	set_time(argv, time_set);
 	while (i < num_philos)
 	{
-		add_philo(philos, new_philo(*time_set, i + 1));
+		add_philo(philos, new_philo(*time_set, i + 1, stop_sim));
 		i++;
 	}
 	if (*philos && (*philos)->next)

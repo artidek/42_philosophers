@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_helpers2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:19:06 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/25 16:14:41 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/28 17:33:43 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,39 @@
 
 void	lock(t_philo *philo)
 {
-	pthread_mutex_t *first_fork;
-	pthread_mutex_t *second_fork;
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
 
-	first_fork = &(philo->fork_lock);
-	second_fork = &(philo->prev->fork_lock);
-	if (first_fork < second_fork)
+	first = philo->fork_lock;
+	second = philo->prev->fork_lock;
+	if (first < second)
 	{
-		pthread_mutex_lock(first_fork);
-		pthread_mutex_lock(second_fork);
+		pthread_mutex_lock(first);
+		pthread_mutex_lock(second);
 	}
 	else
 	{
-		pthread_mutex_lock(second_fork);
-		pthread_mutex_lock(first_fork);
+		pthread_mutex_lock(second);
+		pthread_mutex_lock(first);
 	}
 }
 
 void	unlock(t_philo *philo)
 {
-	if (&(philo->fork_lock) < &(philo->prev->fork_lock))
+	pthread_mutex_t	*first;
+	pthread_mutex_t	*second;
+
+	first = philo->fork_lock;
+	second = philo->prev->fork_lock;
+	if (first < second)
 	{
-		pthread_mutex_unlock(&(philo->fork_lock));
-		pthread_mutex_unlock(&(philo->prev->fork_lock));
+		pthread_mutex_unlock(first);
+		pthread_mutex_unlock(second);
 	}
 	else
 	{
-		pthread_mutex_unlock(&(philo->prev->fork_lock));
-		pthread_mutex_unlock(&(philo->fork_lock));
+		pthread_mutex_unlock(second);
+		pthread_mutex_unlock(first);
 	}
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/25 13:57:05 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/27 12:52:32 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (1);
 	start_sim(philos);
+	free(philos->sim_stop);
 	clear_philos(&philos);
 	return (0);
 }

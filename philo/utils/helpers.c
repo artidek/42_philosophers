@@ -6,11 +6,11 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/24 21:36:18 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/28 13:00:31 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../includes/philo.h"
+#include "../includes/philo.h"
 
 long long int	ft_atoil(const char *str)
 {
@@ -36,30 +36,33 @@ long long int	ft_atoil(const char *str)
 
 void	clear_philos(t_philo **philos)
 {
-	t_philo *next;
+	t_philo	*next;
 
 	if (!*philos)
-		return;
-	while(*philos)
+		return ;
+	while (*philos)
 	{
 		next = (*philos)->next;
+		free((*philos)->fork_lock);
+		free((*philos)->eat_lock);
+		free((*philos)->last_eat);
 		free(*philos);
 		*philos = next;
 	}
 }
 
-long int get_stop_time()
+long int	get_stop_time(void)
 {
-	struct timeval time;
+	struct timeval	time;
 
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-long int	get_time()
+long int	get_time(void)
 {
 	struct timeval	time_stamp;
-	long int	millisecs;
+	long int		millisecs;
 
 	gettimeofday(&time_stamp, NULL);
 	millisecs = time_stamp.tv_usec;
@@ -67,4 +70,12 @@ long int	get_time()
 		return (millisecs);
 	else
 		return (millisecs / 1000);
+}
+
+long int	absl(long int val)
+{
+	if (val < 0)
+		return (-val);
+	else
+		return (val);
 }
