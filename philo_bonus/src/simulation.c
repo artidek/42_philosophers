@@ -6,64 +6,46 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/29 12:18:02 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/07 21:23:31 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo_bonus.h"
 
-static int	eat(t_philo *philo)
+static void	eat(t_philo *philo)
 {
-	if (check_death(philo))
-		return (0);
-	sem_wait(philo->sem_fork);
-	if (check_death(philo))
-		return (0);
-	printf("%ld %d has taken a fork\n", get_time(), philo->philo);
-	sem_wait(philo->sem_fork);
-	if (check_death(philo))
-		return (0);
-	printf("%ld %d has taken a fork\n", get_time(), philo->philo);
-	usleep(500);
-	if (check_death(philo))
-		return (0);
-	printf("%ld %d is eating\n", get_time(), philo->philo);
-	usleep(philo->time_set.time_to_eat);
-	sem_post(philo->sem_fork);
-	sem_post(philo->sem_fork);
-	return (1);
+	sem_wait(philo->philo_set.semaphors.sem_fork);
+	sem_wait(philo->philo_set.semaphors.sem_fork);
+	message(philo->philo_set.philo, philo->philo_set.time_set.start_time, 1);
+	message(philo->philo_set.philo, philo->philo_set.time_set.start_time, 1);
+	message(philo->philo_set.philo, philo->philo_set.time_set.start_time, 2);
+	sem_wait(philo->philo_set.semaphors.sem_alive);
+	philo->philo_set.last_eat = get_time(philo->philo_set.time_set.start_time);
+	sem_post(philo->philo_set.semaphors.sem_alive);
+	philo_delay(philo->philo_set.time_set, philo->philo_set.time_set.time_to_eat);
+	sem_post(philo->philo_set.semaphors.sem_fork);
+	sem_post(philo->philo_set.semaphors.sem_fork);
 }
 
 static void	p_sleep(t_philo *philo)
 {
-	printf("%ld %d is sleeping\n", get_time(), philo->philo);
-	usleep(philo->time_set.time_to_sleep);
+	message(philo->philo_set.philo, philo->philo_set.time_set.start_time, 3);
+	philo_delay(philo->philo_set.time_set, philo->philo_set.time_set.time_to_sleep);
 }
 
-static void	sim_philo(t_philo *philo)
+static void	run_philo(t_philo *philo)
 {
+	philo->philo_set.last_eat = get_time(philo->philo_set.time_set.start_time);
+	pthread_create(&(philo->philo_set.check_death), NULL, check_death, philo);
+	pthread_detach((philo->philo_set.check_death));
 	while (1)
 	{
-		(*philo->cur_time) = get_time();
-		if (check_death(philo))
-		{
-			printf("%ld %d died\n", get_time(), philo->philo);
-			return ;
-		}
-		printf("%ld %d is thinking\n", get_time(), philo->philo);
-		usleep(1000);
-		if (!eat(philo))
-		{
-			printf("%ld %d died\n", get_time(), philo->philo);
-			return ;
-		}
-		(*philo->last_eat) = get_time();
-		philo->num_eaten += 1;
-		if (check_death(philo))
-		{
-			printf("%ld %d died\n", get_time(), philo->philo);
-			return ;
-		}
+		message(philo->philo_set.philo, philo->philo_set.time_set.start_time, 0);
+		philo_delay(philo->philo_set.time_set, 1);
+		eat(philo);
+		philo->philo_set.num_eaten += 1;
+		if (philo->philo_set.num_eaten == philo->philo_set.time_set.num_of_eats)
+			exit(EATEN_ENOUGH);
 		p_sleep(philo);
 	}
 }
@@ -72,7 +54,6 @@ static void	sim_philos(t_philo *philos)
 {
 	t_philo	*temp;
 	pid_t	pid;
-	pid_t	exit_pid;
 
 	temp = philos;
 	while (temp)
@@ -80,19 +61,14 @@ static void	sim_philos(t_philo *philos)
 		pid = fork();
 		if (pid == 0)
 		{
-			(*temp->last_eat) = get_time();
-			sim_philo(temp);
+			run_philo(temp);
 			return ;
 		}
-		else if (pid > 0)
-		{
-			temp->pid = pid;
-			temp = temp->next;
-		}
-		usleep(1000);
+		temp->pid = pid;
+		temp = temp->next;
 	}
-	exit_pid = check_proc_stat();
-	kill_ghosts(philos, exit_pid);
+	check_proc_stat(philos);
+	kill_ghosts(philos);
 }
 
 void	start_sim(t_philo *philos)
@@ -101,8 +77,9 @@ void	start_sim(t_philo *philos)
 		sim_philos(philos);
 	else
 	{
-		printf("%ld %d is thinking\n", get_time(), philos->philo);
-		usleep(philos->time_set.time_to_eat);
-		printf("%ld %d died", get_time(), philos->philo);
+		printf("%ld %d is thinking\n", get_time(philos->philo_set.time_set.start_time), philos->philo_set.philo);
+		printf("%ld %d has take a fork\n", get_time(philos->philo_set.time_set.start_time), philos->philo_set.philo);
+		philo_delay(philos->philo_set.time_set, philos->philo_set.time_set.time_to_die);
+		printf("%ld %d died", get_time(philos->philo_set.time_set.start_time), philos->philo_set.philo);
 	}
 }

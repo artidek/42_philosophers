@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/29 12:21:15 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:18:56 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,28 +34,14 @@ long long int	ft_atoil(const char *str)
 	return (i * sign);
 }
 
-void	clear_philos(t_philo **philos)
-{
-	t_philo	*next;
-
-	if (!*philos)
-		return ;
-	while (*philos)
-	{
-		next = (*philos)->next;
-		free((*philos)->last_eat);
-		free((*philos)->cur_time);
-		free(*philos);
-		*philos = next;
-	}
-}
-
-long int	get_time(void)
+long int	get_time(long int start_time)
 {
 	struct timeval	time;
+	long int		time_extract;
 
 	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	time_extract = ((time.tv_sec - start_time) * 1000) + (time.tv_usec / 1000);
+	return (time_extract);
 }
 
 long int	absl(long int val)
@@ -66,17 +52,14 @@ long int	absl(long int val)
 		return (val);
 }
 
-int	check_death (t_philo *philo)
+void	clear_philos(t_philo **philos)
 {
-	long int	*c_time;
-	long int	*l_eat;
-	long int	death_time;
+	t_philo	*temp;
 
-	c_time = philo->cur_time;
-	l_eat = philo->last_eat;
-	death_time = philo->time_set.time_to_die;
-	if (absl(*c_time - *l_eat) > death_time + 8 || philo->num_eaten == philo->time_set.num_of_eats)
-		return (1);
-	else
-		return (0);
+	while (*philos)
+	{
+		temp = (*philos)->next;
+		free(*philos);
+		*philos = temp;
+	}
 }

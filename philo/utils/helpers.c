@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:09:16 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/28 13:00:31 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/02 23:03:34 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,33 +44,24 @@ void	clear_philos(t_philo **philos)
 	{
 		next = (*philos)->next;
 		free((*philos)->fork_lock);
-		free((*philos)->eat_lock);
 		free((*philos)->last_eat);
 		free(*philos);
 		*philos = next;
 	}
 }
 
-long int	get_stop_time(void)
+long int	get_time(t_philo *philo)
 {
 	struct timeval	time;
 
-	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	if (gettimeofday(&time, NULL) < 0)
+	{
+		printf("gettimeofday failed\n");
+		exit(1);
+	}
+	return (((time.tv_sec - philo->time_set.start_time) * 1000) + (time.tv_usec / 1000));
 }
 
-long int	get_time(void)
-{
-	struct timeval	time_stamp;
-	long int		millisecs;
-
-	gettimeofday(&time_stamp, NULL);
-	millisecs = time_stamp.tv_usec;
-	if (millisecs == 0 || millisecs < 1000)
-		return (millisecs);
-	else
-		return (millisecs / 1000);
-}
 
 long int	absl(long int val)
 {
@@ -78,4 +69,15 @@ long int	absl(long int val)
 		return (-val);
 	else
 		return (val);
+}
+
+void	destroy_mutexes (t_philo *philos)
+{
+	pthread_mutex_destroy(philos->alive_lock);
+	pthread_mutex_destroy(philos->message_lock);
+	while (philos)
+	{
+		pthread_mutex_destroy(philos->fork_lock);
+		philos = philos->next;
+	}
 }

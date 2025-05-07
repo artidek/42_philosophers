@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/27 12:52:32 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:07:07 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (1);
 	start_sim(philos);
+	//destroy_mutexes(philos);
 	free(philos->sim_stop);
 	clear_philos(&philos);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/29 11:56:12 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/07 12:52:31 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(int argc, char **argv)
 {
 	t_time_set	time_set;
 	t_philo	*philos;
+	t_semaphors semaphors;
 
 	philos = NULL;
 	if (argc < 5 || argc > 6)
@@ -30,11 +31,12 @@ int	main(int argc, char **argv)
 		printf("Invalid number of eats\n");
 		return (1);
 	}
-	init_philos(&time_set, &philos, argv);
+	init_philos(&time_set, &philos, argv, &semaphors);
 	if (!philos)
 		return (1);
 	start_sim(philos);
-	sem_close(philos->sem_fork);
+	sem_close(philos->philo_set.semaphors.sem_fork);
+	sem_close(philos->philo_set.semaphors.sem_alive);
 	clear_philos(&philos);
 	return (0);
 }

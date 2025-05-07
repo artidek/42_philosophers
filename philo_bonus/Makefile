@@ -6,14 +6,14 @@
 #    By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/09 22:34:02 by aobshatk          #+#    #+#              #
-#    Updated: 2025/04/28 23:31:41 by aobshatk         ###   ########.fr        #
+#    Updated: 2025/05/07 12:42:34 by aobshatk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -g 
 
-UTILS = ./utils/checkers.c ./utils/helpers.c ./utils/sim_utils.c
+UTILS = ./utils/checkers.c ./utils/helpers.c ./utils/sim_utils.c ./utils/utils.c
 SRC = ./src/init_philos.c ./src/simulation.c
 
 UTILOBJS = $(patsubst %.c, ./objs/%.o, $(notdir $(UTILS)))
