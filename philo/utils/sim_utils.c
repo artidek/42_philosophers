@@ -3,54 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   sim_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 13:19:06 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/05 23:39:53 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/05 16:11:21 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-int	message(t_philo *philo, int msg, int death)
+void	message(t_philo *philo, int msg, long int timestamp)
 {
 	pthread_mutex_lock(philo->message_lock);
-	if (msg == 1 && !death)
-		printf("%ld %d has taken a fork\n", get_time(philo), philo->philo);
-	else if (msg == 2 && !death)
-		printf("%ld %d is eating\n", get_time(philo), philo->philo);
-	else if ((msg == 1 || msg == 2) && death)
-	{
-		pthread_mutex_unlock(philo->message_lock);
-		unlock(philo);
-		return (0);
-	}
-	if (msg == 0 && !death)
-		printf("%ld %d is thinking\n", get_time(philo), philo->philo);
-	else if (msg == 3 && !death)
-		printf("%ld %d is sleeping\n", get_time(philo), philo->philo);
-	else if (msg == 4)
-		printf("%ld %d died\n", get_time(philo), philo->philo);
-	else if ((msg == 0 || msg == 3) && death)
-	{
-		pthread_mutex_unlock(philo->message_lock);
-		return (0);
-	}
+	if (msg == 0)
+		printf("%ld %d is thinking\n", timestamp, philo->philo);
+	if (msg == 1)
+		printf("%ld %d has taken a fork\n", timestamp, philo->philo);
+	if (msg == 2)
+		printf("%ld %d is eating\n", timestamp, philo->philo);
+	if (msg == 3)
+		printf("%ld %d is sleeping\n", timestamp, philo->philo);
+	if (msg == 4)
+		printf("%ld %d died\n", timestamp, philo->philo);
+	if (msg == 5)
+		printf("%ld everybody has eaten enough\n", timestamp);
 	pthread_mutex_unlock(philo->message_lock);
-	return (1);
-}
-
-int	check_stop(t_philo *philo, long int now)
-{
-	if (*(philo->sim_stop) == 1)
-		return (1);
-	if (absl(*(philo->last_eat) - now) > philo->time_set.time_to_die + 9)
-	{
-		message(philo, DIED, 1);
-		*(philo->sim_stop) = 1;
-		return (1);
-	}
-	return (0);
 }
 
 void	lock(t_philo *philo)
@@ -91,32 +68,27 @@ void	unlock(t_philo *philo)
 	}
 }
 
-void	philo_delay (t_philo *philo, long int stop)
+void	philo_delay(t_philo *philo, long int delay)
 {
 	long int	start;
-	long int	now;
 
-	start = get_time(philo);
-	now = get_time(philo);
-	while (now - start < stop)
-	{
-		usleep(50);
-		now = get_time(philo);
-		if (check_stop(philo, now))
-			return;
-	}	
+	start = get_time(philo->time_set.start_time);
+	while (get_time(philo->time_set.start_time) - start < delay)
+		usleep(20);
 }
 
-/*void	start_delay(t_philo *philo, long int delay)
+int	everybody_eaten(t_philo *philo)
 {
-	long int	stop;
-	long int	now;
+	long int	l_eat;
 
-	stop = philo->time_set.start_delay + delay;
-	now = get_time(philo);
-	while (now < stop)
+	while (philo)
 	{
-		usleep(50);
-		now = get_time(philo);
+		pthread_mutex_lock(philo->eat_lock);
+		l_eat = (*philo->last_eat);
+		pthread_mutex_unlock(philo->eat_lock);
+		if (l_eat > -1)
+			return (0);
+		philo = philo->next;
 	}
-}*/
+	return (1);
+}

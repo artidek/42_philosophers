@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:14:56 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/07 12:50:33 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:15:34 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ pid_t	check_proc_stat(t_philo *philo)
 			return (-1);
 		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status) == DIED)
+			if (WEXITSTATUS(status) == EXIT_SUCCESS)
 			{
 				message(find_philo_by_pid(philo, exit_pid),
 					philo->philo_set.time_set.start_time, 4);

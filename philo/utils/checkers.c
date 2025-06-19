@@ -6,13 +6,13 @@
 /*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:38:19 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/04/25 13:54:56 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:34:45 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-static int	is_digit (char **argv)
+static int	is_digit(char **argv)
 {
 	int	i;
 	int	j;
@@ -33,16 +33,16 @@ static int	is_digit (char **argv)
 	return (1);
 }
 
-static int	is_int (char **argv)
+static int	is_int(char **argv)
 {
-	int	i;
+	int				i;
 	long long int	check_val;
 
 	i = 0;
 	while (argv[i])
 	{
 		check_val = ft_atoil(argv[i]) * 1000;
-		if (check_val > INT_MAX || check_val < INT_MIN )
+		if (check_val > INT_MAX || check_val < INT_MIN)
 			return (0);
 		i++;
 	}

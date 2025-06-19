@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simulation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:08:13 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/07 21:23:31 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:45:01 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static void	run_philo(t_philo *philo)
 		philo_delay(philo->philo_set.time_set, 1);
 		eat(philo);
 		philo->philo_set.num_eaten += 1;
-		if (philo->philo_set.num_eaten == philo->philo_set.time_set.num_of_eats)
-			exit(EATEN_ENOUGH);
+		if (eaten_enough(philo))
+			return;
 		p_sleep(philo);
 	}
 }
@@ -62,6 +62,8 @@ static void	sim_philos(t_philo *philos)
 		if (pid == 0)
 		{
 			run_philo(temp);
+			sem_close(temp->philo_set.semaphors.sem_alive);
+			sem_close(temp->philo_set.semaphors.sem_fork);
 			return ;
 		}
 		temp->pid = pid;

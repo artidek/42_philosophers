@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sim_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/28 19:58:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/07 21:04:16 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:15:20 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,23 @@ void	*check_death(void *philo)
 	{
 		now = get_time(temp->philo_set.time_set.start_time);
 		sem_wait(temp->philo_set.semaphors.sem_alive);
-		if (now - temp->philo_set.last_eat >= temp->philo_set.time_set.time_to_die + 8)
+		if (now - temp->philo_set.last_eat >= temp->philo_set.time_set.time_to_die)
 		{
 			sem_post(temp->philo_set.semaphors.sem_alive);
-			exit(DIED);
+			sem_post(temp->philo_set.semaphors.sem_fork);
+			sem_close(temp->philo_set.semaphors.sem_alive);
+			sem_close(temp->philo_set.semaphors.sem_fork);
+			exit(EXIT_SUCCESS);
+		}
+		if (temp->philo_set.num_eaten == temp->philo_set.time_set.num_of_eats)
+		{
+			sem_post(temp->philo_set.semaphors.sem_alive);
+			return (NULL);
 		}
 		sem_post(temp->philo_set.semaphors.sem_alive);
 		usleep(1);
 	}
+	return (NULL);
 }
 
 void	philo_delay(t_time_set time_set, long int stop)
@@ -59,4 +68,18 @@ void	philo_delay(t_time_set time_set, long int stop)
 		now = get_time(time_set.start_time);
 		usleep(1);
 	}
+}
+
+int	eaten_enough(t_philo *philo)
+{
+	sem_wait(philo->philo_set.semaphors.sem_alive);
+	if (philo->philo_set.num_eaten == philo->philo_set.time_set.num_of_eats)
+	{
+		sem_post(philo->philo_set.semaphors.sem_fork);
+		sem_post(philo->philo_set.semaphors.sem_alive);
+		usleep(2000);
+		return (1);
+	}
+	sem_post(philo->philo_set.semaphors.sem_alive);
+	return (0);
 }

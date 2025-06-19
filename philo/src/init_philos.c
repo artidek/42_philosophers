@@ -3,21 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   init_philos.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 20:39:35 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/02 22:47:16 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/05 14:30:09 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
-static void	set_time(char **argv, t_time_set *time_set, long int st_tm)
+static void	set_time(char **argv, t_time_set *time_set, long int pst)
 {
 	time_set->time_to_die = (long int)ft_atoil(argv[2]);
 	time_set->time_to_eat = (long int)ft_atoil(argv[3]);
 	time_set->time_to_sleep = (long int)ft_atoil(argv[4]);
-	time_set->start_time = st_tm;
+	time_set->start_time = pst;
 	if (!argv[5])
 		time_set->num_of_eats = -1;
 	else
@@ -80,15 +80,15 @@ void	init_philos(t_time_set *time_set, t_philo **philos, char **argv)
 	int				i;
 	int				*stop_sim;
 	struct timeval	tv;
-	long int		start_time;
+	int long		prog_start_tm;
 
+	gettimeofday(&tv, NULL);
+	prog_start_tm = tv.tv_sec;
 	stop_sim = malloc(sizeof(int));
 	*stop_sim = 0;
 	num_philos = (int)ft_atoil(argv[1]);
 	i = 0;
-	gettimeofday(&tv, NULL);
-	start_time = tv.tv_sec;
-	set_time(argv, time_set, start_time);
+	set_time(argv, time_set, prog_start_tm);
 	while (i < num_philos)
 	{
 		add_philo(philos, new_philo(*time_set, i + 1, stop_sim));

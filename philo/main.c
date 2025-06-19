@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 18:56:42 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/02 13:07:07 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/04/29 15:33:13 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	main(int argc, char **argv)
 {
 	t_time_set	time_set;
-	t_philo	*philos;
+	t_philo		*philos;
 
 	philos = NULL;
 	if (argc < 5 || argc > 6)
@@ -34,7 +34,6 @@ int	main(int argc, char **argv)
 	if (!philos)
 		return (1);
 	start_sim(philos);
-	//destroy_mutexes(philos);
 	free(philos->sim_stop);
 	clear_philos(&philos);
 	return (0);

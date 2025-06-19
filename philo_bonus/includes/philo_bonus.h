@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+        */
+/*   By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 23:42:04 by aobshatk          #+#    #+#             */
-/*   Updated: 2025/05/07 20:56:21 by aobshatk         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:16:58 by aobshatk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@
 
 # define SEM_FORK "sem_fork"
 # define SEM_ALLIVE "sem_alive"
-# define DIED 1
-# define EATEN_ENOUGH 2
 
 typedef struct s_time_set
 {
@@ -68,6 +66,7 @@ typedef struct s_philo
 
 int					check_valid(char **argv);
 int					message(int philo, long int start_time, int msg);
+int				eaten_enough(t_philo *philo);
 long int			time_diff(struct timeval start);
 long int			get_time(long int start_time);
 long int			absl(long int val);

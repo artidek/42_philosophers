@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aobshatk <aobshatk@mail.com>               +#+  +:+       +#+         #
+#    By: aobshatk <aobshatk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/04/09 22:34:02 by aobshatk          #+#    #+#              #
-#    Updated: 2025/05/02 22:48:12 by aobshatk         ###   ########.fr        #
+#    Updated: 2025/05/05 16:11:34 by aobshatk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g 
+CFLAGS = -Wall -Wextra -Werror -g
 
 UTILS = ./utils/checkers.c ./utils/helpers.c ./utils/routines.c ./utils/sim_utils.c
 SRC = ./src/init_philos.c ./src/simulation.c
